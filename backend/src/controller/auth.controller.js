@@ -194,4 +194,25 @@ async function logoutUser(req, res) {
   });
 }
 
-module.exports = { registerUser, loginUser, googleLogin, logoutUser };
+async function getCurrentUser(req, res) {
+  try {
+    const user = await userModel.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      user: formatUser(user),
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error while fetching user",
+    });
+  }
+}
+
+module.exports = { registerUser, loginUser, googleLogin, logoutUser, getCurrentUser };

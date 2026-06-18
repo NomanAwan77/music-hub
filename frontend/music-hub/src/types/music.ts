@@ -41,3 +41,29 @@ export type AlbumDetail = {
   }
   music: MusicItem[]
 }
+
+export type ArtistInfo = {
+  id: string
+  name: string
+  email: string
+  calendarConnected: boolean
+  calendarEmail?: string
+}
+
+export type BookingSlot = {
+  startTime: string
+  endTime: string
+}
+
+export type BookingInfo = {
+  id: string
+  artist: {
+    id: string
+    name: string
+    email: string
+  }
+  startTime: string
+  endTime: string
+  message?: string
+  status: 'confirmed' | 'cancelled'
+}

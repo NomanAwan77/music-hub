@@ -27,6 +27,21 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true,
     },
+    googleCalendar: {
+        connected: {
+            type: Boolean,
+            default: false,
+        },
+        refreshToken: {
+            type: String,
+        },
+        email: {
+            type: String,
+        },
+        connectedAt: {
+            type: Date,
+        },
+    },
     role: {
         type: String,
         enum: ["user", "artist"],

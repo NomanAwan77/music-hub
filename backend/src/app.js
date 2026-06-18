@@ -3,6 +3,9 @@ const cookieParser = require("cookie-parser")
 const authRoutes = require("./routes/auth.routes")
 const musicRoutes = require("./routes/music.routes")
 const receptionistRoutes = require("./routes/receptionist.routes")
+const calendarRoutes = require("./routes/calendar.routes")
+const artistRoutes = require("./routes/artist.routes")
+const bookingRoutes = require("./routes/booking.routes")
 const app = express()
 const allowedOrigins = [
     process.env.FRONTEND_URL,
@@ -34,4 +37,7 @@ app.use(express.json())
 app.use("/auth/api", authRoutes)
 app.use("/music/api", musicRoutes)
 app.use("/api/receptionist", receptionistRoutes)
+app.use("/api/calendar", calendarRoutes)
+app.use("/api/artists", artistRoutes)
+app.use("/api/bookings", bookingRoutes)
 module.exports = app

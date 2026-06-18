@@ -1,7 +1,8 @@
 import LogoutIcon from '@mui/icons-material/Logout'
 import QueueMusicIcon from '@mui/icons-material/QueueMusic'
-import { AppBar, Box, Chip, IconButton, Stack, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, Chip, IconButton, Stack, Toolbar, Typography } from '@mui/material'
 import type { ReactNode } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import type { UserInfo } from '../../types/music'
 
 type AppShellProps = {
@@ -21,6 +22,12 @@ export function AppShell({ user, onLogout, children }: AppShellProps) {
           </Typography>
           {user && (
             <Stack direction="row" spacing={1} alignItems="center">
+              <Button color="inherit" component={RouterLink} to="/albums" size="small">
+                Albums
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/artists" size="small">
+                Artists
+              </Button>
               <Chip color="secondary" label={user.role.toUpperCase()} size="small" />
               <Typography variant="body2">{user.name}</Typography>
               {onLogout && (

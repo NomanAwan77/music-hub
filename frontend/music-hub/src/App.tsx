@@ -6,6 +6,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./hooks/useAuth";
 import { AlbumDetailsPage } from "./pages/AlbumDetailsPage";
 import { AlbumsPage } from "./pages/AlbumsPage";
+import { ArtistsPage } from "./pages/ArtistsPage";
 import { AuthPage } from "./pages/AuthPage";
 import { apiRequest } from "./api/client";
 
@@ -40,6 +41,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AlbumsPage message={message} setMessage={setMessage} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/artists"
+          element={
+            <ProtectedRoute>
+              <ArtistsPage message={message} setMessage={setMessage} />
             </ProtectedRoute>
           }
         />

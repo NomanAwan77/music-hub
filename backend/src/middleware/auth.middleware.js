@@ -46,4 +46,20 @@ function userAuth(req, res, next) {
     });
   }
 }
-module.exports = { artistAuth, userAuth };
+function optionalAuth(req, res, next) {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    console.log(error);
+  }
+
+  next();
+}
+
+module.exports = { artistAuth, userAuth, optionalAuth };

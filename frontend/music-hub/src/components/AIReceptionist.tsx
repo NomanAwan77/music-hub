@@ -26,6 +26,7 @@ const initialMessages: ChatMessage[] = [
     content: 'Hi! Welcome. How can I help you today?',
   },
 ]
+const maxHistoryMessages = 10
 
 export function AIReceptionist() {
   const [open, setOpen] = useState(false)
@@ -50,7 +51,7 @@ export function AIReceptionist() {
       role: 'user',
       content: text,
     }
-    const history = messages
+    const history = messages.slice(-maxHistoryMessages)
 
     setMessages((currentMessages) => [...currentMessages, userMessage])
     setInput('')
