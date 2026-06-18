@@ -1,4 +1,6 @@
-import { Box, Button, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Box, Button, Divider, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { GoogleLogin } from '@react-oauth/google'
+import type { CredentialResponse } from '@react-oauth/google'
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { UserInfo, UserRole } from '../types/music'
@@ -10,6 +12,8 @@ type AuthFormProps = {
   setLoading: (loading: boolean) => void
   loading: boolean
 }
+
+const googleClientId = import.meta.env.GOOGLE_CLIENT_ID ?? import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''
 
 export function AuthForm({ onAuthSuccess, onError, setLoading, loading }: AuthFormProps) {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
@@ -55,6 +59,34 @@ export function AuthForm({ onAuthSuccess, onError, setLoading, loading }: AuthFo
       }
     } catch (err) {
       const text = err instanceof Error ? err.message : 'Authentication failed'
+      onError(text)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+    if (loading) {
+      return
+    }
+
+    if (!credentialResponse.credential) {
+      onError('Missing Google credential')
+      return
+    }
+
+    onError('')
+    setLoading(true)
+    try {
+      const result = await apiRequest<{ message: string; user: UserInfo }>('/auth/api/google', {
+        method: 'POST',
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+        }),
+      })
+      onAuthSuccess(result.user, result.message)
+    } catch (err) {
+      const text = err instanceof Error ? err.message : 'Google login failed'
       onError(text)
     } finally {
       setLoading(false)
@@ -127,6 +159,28 @@ export function AuthForm({ onAuthSuccess, onError, setLoading, loading }: AuthFo
           Continue
         </Button>
       </Box>
+      {authMode === 'login' && (
+        <>
+          <Divider sx={{ my: 3 }}>or</Divider>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            {googleClientId ? (
+              <GoogleLogin
+                onSuccess={onGoogleSuccess}
+                onError={() => onError('Google login failed')}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+                width={280}
+              />
+            ) : (
+              <Button variant="outlined" disabled>
+                Login with Google
+              </Button>
+            )}
+          </Box>
+        </>
+      )}
     </Box>
   )
 }

@@ -3,6 +3,31 @@ const cookieParser = require("cookie-parser")
 const authRoutes = require("./routes/auth.routes")
 const musicRoutes = require("./routes/music.routes")
 const app = express()
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    process.env.CLIENT_URL,
+    "http://localhost:5173",
+].filter(Boolean)
+
+app.use((req, res, next) => {
+    const origin = req.headers.origin
+
+    if (origin && allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin)
+        res.header("Access-Control-Allow-Credentials", "true")
+    }
+
+    res.header("Vary", "Origin")
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(204)
+    }
+
+    next()
+})
+
 app.use(cookieParser())
 app.use(express.json())
 app.use("/auth/api", authRoutes)
