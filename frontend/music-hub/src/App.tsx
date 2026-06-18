@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AppShell } from "./common/components/AppShell";
+import { AIReceptionist } from "./components/AIReceptionist";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./hooks/useAuth";
 import { AlbumDetailsPage } from "./pages/AlbumDetailsPage";
@@ -59,6 +60,7 @@ function App() {
           element={<Navigate to={user ? "/albums" : "/auth"} replace />}
         />
       </Routes>
+      <AIReceptionist />
     </AppShell>
   );
 }

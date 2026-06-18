@@ -2,6 +2,7 @@ const express = require("express")
 const cookieParser = require("cookie-parser")
 const authRoutes = require("./routes/auth.routes")
 const musicRoutes = require("./routes/music.routes")
+const receptionistRoutes = require("./routes/receptionist.routes")
 const app = express()
 const allowedOrigins = [
     process.env.FRONTEND_URL,
@@ -32,4 +33,5 @@ app.use(cookieParser())
 app.use(express.json())
 app.use("/auth/api", authRoutes)
 app.use("/music/api", musicRoutes)
+app.use("/api/receptionist", receptionistRoutes)
 module.exports = app
